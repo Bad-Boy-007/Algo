@@ -1,0 +1,72 @@
+// Крускала
+
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+namespace Mid
+{
+    public class Description : IComparable
+    {
+        public string bow;
+        public int weight;
+
+        public int CompareTo(object? obj)
+        {
+            Description? description = obj as Description;
+            if (description == null)
+                throw new Exception("Невозможно сравнить объекты");
+            if (this.weight > description.weight)
+                return 1;
+            if (this.weight < description.weight)
+                return -1;
+            return 0;
+        }
+    }
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            List<Description> TotalInfo = new List<Description>();
+            List<Description> Answer = new List<Description>();
+
+            List<string> Points = new List<string>();
+            int n = Convert.ToInt32(Console.ReadLine());
+            
+            while (n > 0)
+            {
+                Description d = new Description();
+                string[] tem = Console.ReadLine().Split(' ');
+
+                d.bow = tem[0];
+                d.weight = Convert.ToInt32(tem[1]);
+                TotalInfo.Add(d);
+                n--;    
+            }
+
+            TotalInfo.Sort();
+            Points.Add(TotalInfo[0].bow[0].ToString());
+
+            for(int i = 0; i < TotalInfo.Count; i++)
+            {
+                if ((Points.Contains(TotalInfo[i].bow[0].ToString()) == false || Points.Contains(TotalInfo[i].bow[1].ToString()) == false) && (Points.Contains(TotalInfo[i].bow[0].ToString()) == true || Points.Contains(TotalInfo[i].bow[1].ToString())) )
+                {
+                    Answer.Add(TotalInfo[i]);
+
+                    if (Points.Contains(TotalInfo[i].bow[0].ToString()) == false)
+                        Points.Add(TotalInfo[i].bow[0].ToString());
+
+                    if (Points.Contains(TotalInfo[i].bow[1].ToString()) == false) 
+                        Points.Add(TotalInfo[i].bow[1].ToString());
+                    i = 0;
+                }
+            }
+
+            Console.WriteLine("Ответ:");
+            foreach (Description d in Answer)
+                Console.WriteLine(d.bow  + " " + d.weight.ToString());
+        }
+    }
+}
